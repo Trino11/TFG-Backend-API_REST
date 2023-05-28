@@ -9,4 +9,4 @@ build:
   script:
     - docker build -t $DOCKERHUB_USERNAME/tfg-backendrest:latest .
     - docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
-    - docker push $DOCKERHUB_USERNAME/tfg-backendauth:latest
+    - docker push $DOCKERHUB_USERNAME/tfg-backendrest:latest
