@@ -1,0 +1,29 @@
+{
+  "name": "rest_api_backend",
+  "version": "0.0.1",
+  "description": "",
+  "main": "./dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon -e js,json",
+    "build": "tsc.cmd --w"
+  },
+  "author": "Antonio Manuel Rebollar Márquez https://github.com/Trino11",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/cors": "^2.8.13",
+    "@types/express": "^4.17.17",
+    "@types/express-session": "^1.17.7",
+    "@types/uuid": "^9.0.1",
+    "nodemon": "^2.0.22",
+    "typescript": "^5.0.4"
+  },
+  "dependencies": {
+    "axios": "^1.4.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express-session": "^1.17.3",
+    "mongodb": "^5.5.0",
+    "uuid": "^9.0.0"
+  }
+}
