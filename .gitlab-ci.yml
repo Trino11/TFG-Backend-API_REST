@@ -1,0 +1,12 @@
+stages:
+  - build
+
+build:
+  stage: build
+  image: docker:19-dind
+  services:
+    - docker:dind
+  script:
+    - docker build -t $DOCKERHUB_USERNAME/tfg-backendrest:latest .
+    - docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
+    - docker push $DOCKERHUB_USERNAME/tfg-backendauth:latest
