@@ -8,7 +8,7 @@ The main way to run the project is via Docker.
 ```
 docker run -d \
   --name my-awesome-container \
-  -p 3001:3001 \
+  -p 3000:3000 \
   trino11/tfg-backendrest:latest
 ```
 
@@ -30,7 +30,7 @@ docker run -d \
   --name my-awesome-container \
   -e DBUSER=myuser \
   -e DBPASSWORD=mysecurepassword \
-  -p 3001:3001 \
+  -p 3000:3000 \
   trino11/tfg-backendrest:latest
 ```
 
