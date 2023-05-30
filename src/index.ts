@@ -1,5 +1,7 @@
 
 import express, { Application, request, response, Router } from 'express';
+import swaggerUi from 'swagger-ui-express';
+import YAML from 'yamljs';
 import cors from 'cors';
 import session from 'express-session';
 import {init} from './database/database.'
@@ -32,6 +34,10 @@ class Server {
         this.app.set("port", process.env.PORT || 3000);
 
         console.log("Using database on " + process.env.DBHOST + ":" + process.env.DBPORT + " with user " + process.env.DBUSER)
+
+        const swaggerDocument = YAML.load('./swagger.yaml');
+
+        this.app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
         this.app.use(cors());
         this.app.use(express.json());
