@@ -4,7 +4,7 @@ import swaggerUi from 'swagger-ui-express';
 import YAML from 'yamljs';
 import cors from 'cors';
 import session from 'express-session';
-import {init} from './database/database.'
+import { init as dbinit } from './database/database.'
 
 import infoRoutes from './routes/infoRoutes';
 import userRoutes from './routes/userRoutes';
@@ -19,6 +19,9 @@ class Server {
     private app: Application;
     private isHttp: boolean = false;
 
+    private server:any;
+    private io:any;
+
     // private optionsProxy = {
     //     target: hass,
     //     ws: true
@@ -26,8 +29,19 @@ class Server {
 
     constructor() {
         this.app = express();
+        this.server = require('http').Server(this.app)
+        this.io = require("socket.io")(this.server, {
+            cors: {
+                origin: '*',
+                methods: ['GET', 'POST'],
+                allowedHeaders: ['Authorization', 'Content-Type'],
+                credentials: true
+              }
+        })
         this.config();
         this.routes();
+        this.wsEvents();
+
     }
 
     config() { //Express configuration
@@ -48,10 +62,11 @@ class Server {
             saveUninitialized: true
         }))
 
-        init()
+        dbinit()
+
     }
 
-    async routes() { //Express routes configuration
+    routes() { //Express routes configuration
         let router: Router = Router()
 
         router.use("/info", auth, infoRoutes);
@@ -63,10 +78,26 @@ class Server {
 
     }
 
+    wsEvents(){
+        this.io.on('connection', (socket:any) => {
+            console.log('Cliente conectado');
+          
+            // Manejar eventos del socket
+            socket.on('mensaje', (data:any) => {
+              console.log('Mensaje recibido:', data);
+            });
+          
+            // Enviar datos al cliente
+            socket.emit('mensaje', '¡Hola desde el servidor de websockets!');
+          });
+    }
 
     start() {
-        this.app.listen(this.app.get("port"), () => console.log("Server started using http. Listening on port ", this.app.get("port"))); //http server
+        //this.app.listen(this.app.get("port"), () => console.log("Server started using http. Listening on port ", this.app.get("port"))); //http server
+        this.server.listen(this.app.get("port"), () => console.log("Server started using http. Listening on port ", this.app.get("port"))); //http server
     }
 }
-let server = new Server();
-server.start();
+let fullserver = new Server();
+fullserver.start();
+
+
