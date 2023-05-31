@@ -154,6 +154,7 @@ class PostController {
                 pid: uuidv4(),
                 title: req.body.title.replace(/ /g, "\\_"),
                 body: req.body.body,
+                plain_body: req.body.plain_body,
                 public_date: new Date(),
                 edit_date: undefined,
                 tags: req.body.tags,
@@ -197,6 +198,7 @@ class PostController {
             var postToUpdate: PostDocument = {
                 title: req.body.title.replace(/ /g, "\\_"),
                 body: req.body.body,
+                plain_body: req.body.plain_body,
                 edit_date: new Date(),
                 edited: true,
             }
@@ -257,6 +259,7 @@ class PostController {
             var commentToAdd: CommentDocument = {
                 cid: uuidv4(),
                 body: req.body.body,
+                plain_body: req.body.plain_body,
                 public_date: new Date(),
                 edit_date: undefined,
                 edited: false,
