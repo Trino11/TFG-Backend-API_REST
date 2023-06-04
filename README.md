@@ -5,7 +5,7 @@
 
 This is not the main repository of the project, just a mirror. The updated repo can be found on gitlab 
 
-https://git.trinohost.com/trino/tfg-backend-api_rest/-/blob/master/README.md
+https://git.trinohost.com/trino/tfg-backend-api_rest
 
 ## General projects features (APIs and consumers)
 
