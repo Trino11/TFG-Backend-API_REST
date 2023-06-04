@@ -1,0 +1,563 @@
+openapi: 3.0.3
+info:
+  title: TFG Forum APIREST
+  description: |-
+    This is the Forum APIREST documentation and usage guide, explores all the API endpoints.
+    You can find the project at [Github](https://github.com/Trino11) and on [GitLab](https://git.trinohost.com/trino/tfg-backend-api_rest).
+  contact:
+    email: rebollar.marquez.antoniomanuel@gmail.com
+  version: 1.0.0
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+  - url: https://api.trinohost.com/v1
+tags:
+  - name: info
+    description: Info about server status
+  - name: user
+    description: Operations about user
+  - name: post
+    description: Access to posts and comments info and methods
+  - name: msg
+    description: Access to user messages 
+paths:
+  /info:
+    get:
+      tags:
+        - info
+      summary: Get the API server status
+      description: Get the API server status
+      operationId: getInfo
+      responses:
+        '200':
+          description: Server online
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerOn'          
+        '500':
+          description: Server error
+  /user/all:
+    get:
+      tags:
+        - user
+      summary: Get the all users info
+      description: Get the all users info
+      operationId: getAllUsers
+      responses:
+        '200':
+          description: All users basic info
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/AllUsersResponse'          
+        '500':
+          description: Server error
+  /user/own:
+    get:
+      tags:
+        - user
+      summary: Get the own user info based on token
+      description: Get the own user info based on token
+      operationId: getOwnUser
+      responses:
+        '200':
+          description: Get the own user info
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/OwnUserResponse'  
+        '401':
+          description: Token error
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/AuthError'          
+        '500':
+          description: Server error
+  /user/own/admin:
+    get:
+      tags:
+        - user
+      summary: Get if the user is admin based on token
+      description: Get if the user is admin based on token
+      operationId: getIsOwnUserAdmin
+      responses:
+        '200':
+          description: The user is admin
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/IsOwnUserAdminResponse'  
+        '403':
+          description: The user is not admin
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/IsOwnUserAdminError'    
+        '401':
+          description: Token error
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/AuthError'      
+        '500':
+          description: Server error
+  /user/register:
+    post:
+      tags:
+        - user
+      summary: Register an user on the service based on a token
+      description: Register an user on the service based on a token
+      operationId: postRegisterUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+                $ref: '#/components/schemas/RegisterUserBody'
+      responses:
+        '201':
+          description: User registered
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/UserRegisteredSucessfully'
+        '401':
+          description: Token error
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/AuthError'      
+        '500':
+          description: Server error
+  /user/single/alias/{alias_tag}:
+    get:
+      tags:
+        - user
+      summary: Get user data based on a parameter
+      description: Get user data based on a parameter
+      operationId: getUserByAlias
+      parameters:
+        - name: alias_tag
+          in: path
+          description: Alias_Tag of the user to return
+          required: true
+          schema:
+            type: string
+            example: "trino_11111"
+      responses:
+        '200':
+          description: User info
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/OwnUserResponse'
+        '500':
+          description: Server error
+  /user/single/uid/{uid}:
+    get:
+      tags:
+        - user
+      summary: Get user data based on a parameter
+      description: Get user data based on a parameter
+      operationId: getUserByUID
+      parameters:
+        - name: uid
+          in: path
+          description: UID of the user to return
+          required: true
+          schema:
+            type: string
+            example: "fad5ed62-ef77-4ee1-bf91-53fddba84cbc"
+      responses:
+        '200':
+          description: User info
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/OwnUserResponse'
+        '500':
+          description: Server error
+  /user/single/{alias}:
+    put:
+      tags:
+        - user
+      summary: Update user data based on a parameter
+      description: Update user data based on a parameter
+      operationId: putUserByAlias
+      parameters:
+        - name: alias
+          in: path
+          description: Alias of the user to update
+          required: true
+          schema:
+            type: string
+            example: "trino"
+      requestBody:
+        content:
+          application/json:
+            schema:
+                $ref: '#/components/schemas/RegisterUserBody'
+      responses:
+        '200':
+          description: User updated
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/UserUpdatedResponse'
+        '500':
+          description: Server error
+          
+  /post/all:
+    get:
+      tags:
+        - post
+      summary: Get all posts
+      description: Get all posts
+      operationId: getAllPosts
+      responses:
+        '200':
+          description: All posts
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/AllPostsResponse'
+  /post/path:
+    get:
+      tags:
+        - post
+      responses:
+        '200':
+          description: All posts from path
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/AllPostsResponse'
+  /post/path/{path}:
+    get:
+      tags:
+        - post
+      parameters:
+        - name: path
+          in: path
+          description: Path to search posts in
+          required: true
+          schema:
+            type: string
+            example: "Informacion"
+      responses:
+        '200':
+          description: All posts from path
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/AllPostsResponse'
+  /post/single/{title}:
+    get:
+      tags:
+        - post
+      parameters:
+        - name: title
+          in: path
+          description: Title of the post to search
+          required: true
+          schema:
+            type: string
+            example: "Documentaci%C3%B3n_sobre_la_API"
+      responses:
+        '200':
+          description: Post found
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/PostResponse'
+  /post/user/{uid}:
+    get:
+      tags:
+        - post
+      parameters:
+        - name: uid
+          in: path
+          description: uid of the user to search his posts
+          required: true
+          schema:
+            type: string
+            example: "fad5ed62-ef77-4ee1-bf91-53fddba84cbc"
+      responses:
+        '200':
+          description: Posts found
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/AllPostsResponse'
+  /post/single:
+    post:
+      tags:
+        - post
+      requestBody:
+        content:
+          application/json:
+            schema:
+             $ref: '#/components/schemas/PostResponse'
+      responses:
+        '201':
+          description: Post created
+  /post/single/{titleUpdate}:
+    put:
+      tags:
+        - post
+      requestBody:
+        content:
+          application/json:
+            schema:
+             $ref: '#/components/schemas/PostResponse'
+      parameters:
+        - name: titleUpdate
+          in: path
+          description: Title of the post to update
+          required: true
+          schema:
+            type: string
+            example: "Documentaci%C3%B3n_sobre_la_API"
+      responses:
+        '200':
+          description: Post updated
+  /post/single/{titleDelete}:
+    delete:
+      tags:
+        - post
+      parameters:
+        - name: titleDelete
+          in: path
+          description: Title of the post to delete
+          required: true
+          schema:
+            type: string
+            example: "Documentaci%C3%B3n_sobre_la_API"
+      responses:
+        '200':
+          description: Post deleted
+  /post/single/{title}/comment:
+    post:
+      tags:
+        - post
+      requestBody:
+        content:
+          application/json:
+            schema:
+             $ref: '#/components/schemas/CreateCommentRequest'
+      parameters:
+        - name: title
+          in: path
+          description: Title of the post to create comment
+          required: true
+          schema:
+            type: string
+            example: "Documentaci%C3%B3n_sobre_la_API"
+      responses:
+        '200':
+          description: Comment created
+  /post/folder:
+    post:
+      tags:
+        - post
+      requestBody:
+        content:
+          application/json:
+            schema:
+             $ref: '#/components/schemas/CreateFolderRequest'
+      responses:
+        '200':
+          description: Folder created
+  /msg/ownAll:
+    get:
+      tags:
+        - msg
+      responses:
+        '200':
+          description: Chats from user
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/AllChatsResponse'
+          
+          
+          
+components:
+  schemas:
+    ServerOn:
+      type: object
+      properties:
+        msg:
+          type: string
+          example: Service server on
+    AllUsersResponse:
+      type: object
+      properties:
+        msg:
+          type: string
+          example: Done
+        result:
+          type: array
+          items:
+            type: object
+            properties:
+              uid:
+               type: string
+               example: 'fad5ed62-ef77-4ee1-bf91-53fddba84cbc'
+              tag:
+               type: integer
+               example: 25448
+              alias:
+                type: string
+                example: 'trino'
+    OwnUserResponse:
+      type: object
+      properties:
+        msg:
+          type: string
+          example: Done
+        result:
+          type: object
+          properties:
+            _id:
+             type: string
+             example: '647376fa0be2148cbbe5fefb'
+            uid:
+             type: string
+             example: 'fad5ed62-ef77-4ee1-bf91-53fddba84cbc'
+            name:
+             type: string
+             example: 'John Tompson'
+            tag:
+             type: integer
+             example: 25448
+            alias:
+              type: string
+              example: 'trino'
+            birthdate:
+              type: string
+              example: '2001-05-14T00:00:00.000Z'
+    AuthError:
+      type: object
+      properties:
+        error:
+          type: string
+          example: you dont have a token
+    IsOwnUserAdminResponse:
+      type: object
+      properties:
+        msg:
+          type: string
+          example: Done
+        result:
+          type: boolean
+          example: true
+    IsOwnUserAdminError:
+      type: object
+      properties:
+        msg:
+          type: string
+          example: Not an admin
+        result:
+          type: boolean
+          example: false
+    RegisterUserBody:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Pedro
+        alias:
+          type: string
+          example: 'pedrito'
+        tag:
+          type: integer
+          example: 12345
+        lastname:
+          type: string
+          example: Martinez
+        birthday:
+          type: string
+          example: "2002-2-21"
+    UserRegisteredSucessfully:
+      type: object
+      properties:
+        msg:
+          type: string
+          example: User created
+    UserUpdatedResponse:
+      type: object
+      properties:
+        msg:
+          type: string
+          example: User modified
+    AllPostsResponse:
+      type: object
+      properties:
+        msg:
+          type: string
+          example: Done
+        result:
+          type: array
+          items:
+            type: object
+    PostResponse:
+      type: object
+      properties:
+        msg:
+          type: string
+          example: Done
+        result:
+          type: object
+          properties:
+            author:
+              type: object
+            title:
+              type: string
+            body:
+              type: object
+            plain_body:
+              type: string
+            comments:
+              type: array
+              items:
+                type: object
+            edit_date:
+              type: string
+            public_date:
+              type: string
+            edited:
+              type: boolean
+            parent:
+              type: string
+            pid:
+              type: string
+    CreateCommentRequest:
+      type: object
+      properties:
+        msg:
+          type: string
+          example: Done
+        result:
+          type: object
+    CreateFolderRequest:
+      type: object
+      properties:
+        msg:
+          type: string
+          example: Done
+        result:
+          type: object
+    AllChatsResponse:
+      type: object
+      properties:
+        msg:
+          type: string
+          example: Done
+        result:
+          type: array
+          items:
+            type: object
+          

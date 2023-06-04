@@ -12,7 +12,7 @@ class PostRoutes {
     
     config() {
         this.router.get("/all", postController.showAll);
-        this.router.get("/path/", postController.showPath);
+        this.router.get("/path", postController.showPath);
         this.router.get("/path/:path", postController.showPath);
         this.router.get("/single/:pid", postController.showPost);
         this.router.get("/user/:uid", postController.showPostsFromUser);

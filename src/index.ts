@@ -1,16 +1,19 @@
 
 import express, { Application, request, response, Router } from 'express';
+import session from 'express-session';
+import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
 import YAML from 'yamljs';
-import cors from 'cors';
-import session from 'express-session';
-import { init as dbinit } from './database/database.'
 
 import infoRoutes from './routes/infoRoutes';
 import userRoutes from './routes/userRoutes';
 import postRoutes from './routes/postRoutes';
+import msgRoutes from './routes/msgRoutes';
 import commentRoutes from './routes/commentRoutes';
 import auth from './middlewares/t-auth';
+
+import configureIO from './webSocket';
+import { init as dbinit } from './database/database.'
 
 require('dotenv').config()
 
@@ -19,13 +22,8 @@ class Server {
     private app: Application;
     private isHttp: boolean = false;
 
-    private server:any;
-    private io:any;
-
-    // private optionsProxy = {
-    //     target: hass,
-    //     ws: true
-    // }
+    private server: any;
+    private io: any;
 
     constructor() {
         this.app = express();
@@ -33,14 +31,14 @@ class Server {
         this.io = require("socket.io")(this.server, {
             cors: {
                 origin: '*',
-                methods: ['GET', 'POST'],
+                methods: ['GET', 'POST', 'DELETE', 'PUT'],
                 allowedHeaders: ['Authorization', 'Content-Type'],
                 credentials: true
-              }
+            }
         })
         this.config();
+        configureIO(this.io)
         this.routes();
-        this.wsEvents();
 
     }
 
@@ -69,27 +67,14 @@ class Server {
     routes() { //Express routes configuration
         let router: Router = Router()
 
-        router.use("/info", auth, infoRoutes);
+        router.use("/info", infoRoutes);
         router.use("/user", userRoutes);
         router.use("/post", postRoutes);
         router.use("/comment", commentRoutes);
+        router.use("/msg", msgRoutes);
 
         this.app.use("/v1", router);
 
-    }
-
-    wsEvents(){
-        this.io.on('connection', (socket:any) => {
-            console.log('Cliente conectado');
-          
-            // Manejar eventos del socket
-            socket.on('mensaje', (data:any) => {
-              console.log('Mensaje recibido:', data);
-            });
-          
-            // Enviar datos al cliente
-            socket.emit('mensaje', '¡Hola desde el servidor de websockets!');
-          });
     }
 
     start() {

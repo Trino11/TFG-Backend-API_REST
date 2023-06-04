@@ -11,13 +11,6 @@ class CommentRoutes {
     }
     
     config() {
-        this.router.get("/own", auth, commentController.showOwn);
-        this.router.post("/register", auth, commentController.registerOwn);
-        this.router.get("/all", commentController.showAll);
-        this.router.get("/single/:alias", commentController.showSingle);
-        this.router.delete("/single/:uid", commentController.deleteSingle);
-        this.router.put("/single/:uid", commentController.updateSingle);
-        this.router.post("/single", commentController.createSingle);
     }
 }
 const commentRoutes = new CommentRoutes();

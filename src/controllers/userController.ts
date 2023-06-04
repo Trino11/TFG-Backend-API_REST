@@ -74,7 +74,7 @@ class UserController {
             if (usersResult?.admin)
                 res.status(200).json({ msg: "Done", result: usersResult.admin })
             else
-                throw new Error('usersResult.length != 1.')
+                res.status(403).json({ msg: "Not an admin", result: false })
         } catch (e) {
             console.error(e)
             res.status(500).json({ msg: "Error while trying to access to database." })
@@ -158,7 +158,7 @@ class UserController {
         try {
             const database = client.db('database');
             const users = database.collection('user');
-            const usersResult = await users.find({}).project({ alias: 1 }).toArray();
+            const usersResult = await users.find({}).project({ _id:0, uid:1, alias: 1, tag:1 }).toArray();
             res.status(200).json({ msg: "Done", result: usersResult })
         } catch (e) {
             console.error(e)
@@ -238,15 +238,14 @@ class UserController {
             const database = client.db('database');
             const users = database.collection('user');
             var userToUpate: CompleteUserModel = {
-                nombre: req.body.nombre,
-                apellidos: req.body.apellidos,
+                name: req.body.name,
+                lastname: req.body.lastname,
                 alias: req.body.alias,
                 tag: parseInt(req.body.tag),
-                foto: req.body.foto,
-                etiqueta: req.body.etiqueta,
+                ppic: req.body.ppic,
                 newsletter: req.body.newsletter,
-                telefono: req.body.telefono,
-                fecha_nacimiento: req.body.fecha_nacimiento
+                phone: req.body.phone,
+                birthday: req.body.birthday
             }
 
             userToUpate = UserController.trimUser(userToUpate)
