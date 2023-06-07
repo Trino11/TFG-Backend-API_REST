@@ -112,7 +112,6 @@ class UserController {
                     }
                 })
                 .catch(function (error) {
-                    console.log(error)
                 })
                 .finally(function () {
                     // always executed
@@ -142,6 +141,8 @@ class UserController {
                         else
                             throw new Error('result.insertedId == null.')
                     }
+            else
+                res.status(401).json({ msg: "The token is not valid." })
 
         } catch (e) {
             console.error(e)
@@ -158,7 +159,7 @@ class UserController {
         try {
             const database = client.db('database');
             const users = database.collection('user');
-            const usersResult = await users.find({}).project({ _id:0, uid:1, alias: 1, tag:1 }).toArray();
+            const usersResult = await users.find({}).project({ _id: 0, uid: 1, alias: 1, tag: 1 }).toArray();
             res.status(200).json({ msg: "Done", result: usersResult })
         } catch (e) {
             console.error(e)
@@ -176,7 +177,7 @@ class UserController {
         try {
             const database = client.db('database');
             const users = database.collection('user');
-            const usersResult = await users.findOne({ alias: alias, tag:tag });
+            const usersResult = await users.findOne({ alias: alias, tag: tag });
             if (usersResult)
                 res.status(200).json({ msg: "Done", result: usersResult })
             else
@@ -195,7 +196,7 @@ class UserController {
         try {
             const database = client.db('database');
             const users = database.collection('user');
-            const usersResult = await users.findOne({ uid: req.params.uid }, {projection:{password:0}});
+            const usersResult = await users.findOne({ uid: req.params.uid }, { projection: { password: 0 } });
             if (usersResult)
                 res.status(200).json({ msg: "Done", result: usersResult })
             else
@@ -249,7 +250,7 @@ class UserController {
             }
 
             userToUpate = UserController.trimUser(userToUpate)
-            const result = await users.updateOne({ uid: req.params.uid }, {$set: userToUpate} );
+            const result = await users.updateOne({ uid: req.params.uid }, { $set: userToUpate });
 
             if (result.modifiedCount == 1)
                 res.status(200).json({ msg: "User modified" })

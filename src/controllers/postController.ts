@@ -29,7 +29,7 @@ class PostController {
     public async showPath(req: Request, res: Response) {
         let folderPath: string = ""
         if (req.params.path)
-            folderPath = req.params.path.replace(/_/g, "/").replace(/%20/g, "\\_").replace(/ /g, "\\_")
+            folderPath = req.params.path.replace(/_/g, "/").replace(/%20/g, " ")
         const client: MongoClient = getClient()
         try {
             const database = client.db('database');
