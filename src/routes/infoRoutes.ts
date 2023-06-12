@@ -9,8 +9,8 @@ class InfoRoutes {
         this.config();
     }
     
-    config() {
-        this.router.get("/", infoController.showInfo);
+    config() { //Info routes
+        this.router.get("/", infoController.showInfo); //Returns info about server status
     }
 }
 const infoRoutes = new InfoRoutes();

@@ -10,7 +10,6 @@ import userRoutes from './routes/userRoutes';
 import postRoutes from './routes/postRoutes';
 import msgRoutes from './routes/msgRoutes';
 import commentRoutes from './routes/commentRoutes';
-import auth from './middlewares/t-auth';
 
 import configureIO from './webSocket';
 import { init as dbinit } from './database/database.'
@@ -73,12 +72,12 @@ class Server {
         router.use("/comment", commentRoutes);
         router.use("/msg", msgRoutes);
 
-        this.app.use("/v1", router);
+        this.app.use("/v1", router); //Mount all routes on /v1
 
     }
 
     start() {
-        //this.app.listen(this.app.get("port"), () => console.log("Server started using http. Listening on port ", this.app.get("port"))); //http server
+        //this.app.listen(this.app.get("port"), () => console.log("Server started using http. Listening on port ", this.app.get("port"))); //express server
         this.server.listen(this.app.get("port"), () => console.log("Server started using http. Listening on port ", this.app.get("port"))); //http server
     }
 }

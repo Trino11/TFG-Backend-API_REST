@@ -10,8 +10,8 @@ class MsgRoutes {
         this.config();
     }
     
-    config() {
-        this.router.get("/ownAll", auth, msgController.showAllOwn);
+    config() { //Message routes
+        this.router.get("/ownAll", auth, msgController.showAllOwn); //Get all own chats and messages
     }
 }
 const msgRoutes = new MsgRoutes();
