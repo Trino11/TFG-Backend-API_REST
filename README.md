@@ -1,8 +1,6 @@
 # TFG-Backend-API_REST
 
 ## Swagger API docs
-https://api.trinohost.com/api-docs/
-
 
 ## General projects features (APIs and consumers)
 
